@@ -6,7 +6,9 @@
 - Tools: https://github.com/dhruvvyas90/qemu-rpi-kernel
 - Ubuntu: https://ubuntu.com/download/desktop/thank-you?version=18.04.4&architecture=amd64
 
-## Ubuntu 18.04.4 LTS Packages
+## Ubuntu 18.04.4 LTS 
+
+### Packages
 
 - sudo
 - qemu-system
@@ -16,7 +18,7 @@
 - git
 - code: https://code.visualstudio.com/docs/setup/linux
 
-## Ubuntu 18.04.4 LTS Edits
+### Edits
 
 - sudoers: https://askubuntu.com/questions/334318/sudoers-file-enable-nopasswd-for-user-all-commands
 
@@ -24,9 +26,11 @@
 %sudo  ALL=(ALL) NOPASSWD: ALL
 ```
 
-## Raspberry Pi Packages
+## Raspberry Pi 
 
-## Raspberry Pi Edits
+### Packages
+
+### Edits
 
 - sudoers: https://askubuntu.com/questions/334318/sudoers-file-enable-nopasswd-for-user-all-commands
 
@@ -35,6 +39,6 @@
 ```
 
 
-## Raspberry Pi Info
+### Info
 
 - Default User/Password: pi/raspberry
