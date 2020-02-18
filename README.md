@@ -16,7 +16,24 @@
 - git
 - code: https://code.visualstudio.com/docs/setup/linux
 
+## Ubuntu 18.04.4 LTS Edits
+
+- sudoers: https://askubuntu.com/questions/334318/sudoers-file-enable-nopasswd-for-user-all-commands
+
+```bash
+%sudo  ALL=(ALL) NOPASSWD: AL
+```
+
 ## Raspberry Pi Packages
+
+## Raspberry Pi Edits
+
+- sudoers: https://askubuntu.com/questions/334318/sudoers-file-enable-nopasswd-for-user-all-commands
+
+```bash
+%sudo  ALL=(ALL) NOPASSWD: AL
+```
+
 
 ## Raspberry Pi Info
 
