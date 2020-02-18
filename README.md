@@ -10,6 +10,7 @@
 
 ### Packages
 
+- build-essentials
 - sudo
 - qemu-system
 - gcc-arm-linux-gnueabi
