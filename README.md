@@ -21,7 +21,7 @@
 - sudoers: https://askubuntu.com/questions/334318/sudoers-file-enable-nopasswd-for-user-all-commands
 
 ```bash
-%sudo  ALL=(ALL) NOPASSWD: AL
+%sudo  ALL=(ALL) NOPASSWD: ALL
 ```
 
 ## Raspberry Pi Packages
@@ -31,7 +31,7 @@
 - sudoers: https://askubuntu.com/questions/334318/sudoers-file-enable-nopasswd-for-user-all-commands
 
 ```bash
-%sudo  ALL=(ALL) NOPASSWD: AL
+%sudo  ALL=(ALL) NOPASSWD: ALL
 ```
 
 
