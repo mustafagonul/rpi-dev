@@ -6,6 +6,13 @@
 - Tools: https://github.com/dhruvvyas90/qemu-rpi-kernel
 - Ubuntu: https://ubuntu.com/download/desktop/thank-you?version=18.04.4&architecture=amd64
 
+## Scripts
+
+- [raspbian-buster-lite.sh](./raspbian-buster-lite.sh)
+  Script is used to run raspbian on QEMU.
+- [build.sh](./build.sh) 
+  Script is used to build the code and run on the emulator.
+
 ## Ubuntu 18.04.4 LTS 
 
 ### Packages
@@ -38,7 +45,6 @@
 ```bash
 %sudo  ALL=(ALL) NOPASSWD: ALL
 ```
-
 
 ### Info
 
