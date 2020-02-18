@@ -2,8 +2,8 @@
 
 ## Downloads
 
-- Image:  https://www.raspberrypi.org/downloads/raspbian/
-- Tools:  https://github.com/dhruvvyas90/qemu-rpi-kernel
+- Image: https://www.raspberrypi.org/downloads/raspbian/
+- Tools: https://github.com/dhruvvyas90/qemu-rpi-kernel
 - Ubuntu: https://ubuntu.com/download/desktop/thank-you?version=18.04.4&architecture=amd64
 
 ## Ubuntu 18.04.4 LTS Packages
@@ -14,10 +14,10 @@
 - ssh
 - sshpass
 - git
+- code: https://code.visualstudio.com/docs/setup/linux
 
 ## Raspberry Pi Packages
 
 ## Raspberry Pi Info
 
 - Default User/Password: pi/raspberry
-
