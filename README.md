@@ -21,8 +21,10 @@
 - sudo
 - qemu-system
 - gcc-arm-linux-gnueabi
+- g++-arm-linux-gnueabi
 - ssh
 - sshpass
+- wget
 - git
 - code: https://code.visualstudio.com/docs/setup/linux
 
@@ -35,6 +37,21 @@
 ```
 
 ## Raspberry Pi 
+
+### SSH
+
+To enable ssh on the Raspberry Pi, you 
+
+```bash
+sudo systemctl start ssh
+sudo systemctl enable ssh
+```
+
+### Poweroff
+
+```bash
+sudo poweroff
+```
 
 ### Packages
 

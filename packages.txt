@@ -1,0 +1,8 @@
+build-essentials
+qemu-system
+gcc-arm-linux-gnueabi
+g++-arm-linux-gnueabi
+ssh
+sshpass
+wget
+git
