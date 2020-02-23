@@ -21,12 +21,12 @@ $(DOWNLOAD_DIR):
 
 $(RPI_IMAGE_IMG): $(RPI_IMAGE_ZIP)
 	unzip -n $(RPI_IMAGE_ZIP) -d $(DOWNLOAD_DIR)
+	./enable-ssh.sh $(RPI_IMAGE_IMG)
 
 $(RPI_IMAGE_ZIP): $(DOWNLOAD_DIR)
 	wget -nc -P $(DOWNLOAD_DIR) $(RPI_IMAGE_LINK)
 
 $(QEMU_RPI_KERNEL_REPO): $(DOWNLOAD_DIR)
-	echo $@
 	cd $(DOWNLOAD_DIR) && git clone $(QEMU_RPI_KERNEL_LINK)	&& cd ..
 
 download: $(RPI_IMAGE_IMG) $(QEMU_RPI_KERNEL_REPO)
