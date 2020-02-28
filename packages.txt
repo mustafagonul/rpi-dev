@@ -1,5 +1,6 @@
 build-essentials
 qemu-system
+qemu-user-static
 gcc-arm-linux-gnueabi
 g++-arm-linux-gnueabi
 ssh
