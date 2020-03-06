@@ -1,8 +1,10 @@
 build-essentials
+sudo
 qemu-system
 qemu-user-static
 gcc-arm-linux-gnueabi
 g++-arm-linux-gnueabi
+gdb-multiarch
 ssh
 sshpass
 wget

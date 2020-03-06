@@ -49,7 +49,7 @@ run-rpi: # prepare
 		-m 256 \
 		-drive file=$(RPI_IMAGE_IMG),format=raw,index=0,media=disk \
 		-net nic \
-		-net user,hostfwd=tcp::5022-:22,hostfwd=tcp::12345-:2345 \
+		-net user,hostfwd=tcp::5022-:22,hostfwd=tcp::2345-:2345 \
 		-dtb $(DTB) \
 		-kernel $(KERNEL) \
 		-append 'root=/dev/sda2 panic=1' \
@@ -63,7 +63,7 @@ run-rpi-graphic:
 		-m 256 \
 		-drive file=$(RPI_IMAGE_IMG),format=raw,index=0,media=disk \
 		-net nic \
-		-net user,hostfwd=tcp::5022-:22,hostfwd=tcp::12345-:2345 \
+		-net user,hostfwd=tcp::5022-:22,hostfwd=tcp::2345-:2345 \
 		-dtb $(DTB) \
 		-kernel $(KERNEL) \
 		-append 'root=/dev/sda2 panic=1' \
@@ -88,4 +88,4 @@ all: download build
 
 clean: clean-download
 
-.PHONY: prepare packages download clean-download run-rpi poweroff-rpi build clean-build all clean $(EXAMPLES)
+.PHONY: prepare packages download clean-download clean-image run-rpi run-rpi-graphic poweroff-rpi run-ssh build clean-build all clean $(EXAMPLES)
