@@ -17,9 +17,8 @@ EXE="$BUILD/$NAME"
 
 # Build params
 FILE="$1"
-COMPILE_PARAMS="${@:2}"
-LINK_PARAMS=""
 COMPILER="arm-linux-gnueabi-gcc"
+COMPILE_PARAMS="${@:2}"
 
 if [ -z "$FILE" ]
   then
@@ -37,7 +36,18 @@ echo "==========================================================================
 echo "Building $NAME ..."
 echo "======================================================================================================"
 
-$COMPILER $COMPILE_PARAMS -g -o $EXE $FILE $LINK_PARAMS
+$COMPILER $FILE $COMPILE_PARAMS -g -o $EXE
+if [ $? -eq 0 ]; then
+  echo
+  echo "Building success!" 
+  echo
+else
+  echo
+  echo "Building failed!" 
+  echo
+
+  exit
+fi
 
 
 echo ""
@@ -51,9 +61,6 @@ sshpass -p "${PASSWORD}" ssh -p $PORT $SSH_PARAMS "$ENDPOINT" "mkdir -p $DIR"
 
 # Copying
 sshpass -p "${PASSWORD}" scp -P $PORT $SSH_PARAMS "$EXE"             "$ENDPOINT":"$DIR"
-sshpass -p "${PASSWORD}" scp -P $PORT $SSH_PARAMS ../common/run.sh   "$ENDPOINT":"$DIR"/run.sh
-
-
 
 # Running
 echo ""
@@ -62,6 +69,6 @@ echo "Running $NAME ..."
 echo "======================================================================================================"
 echo ""
 
-sshpass -p "${PASSWORD}" ssh -p $PORT $SSH_PARAMS "$ENDPOINT" "cd $DIR && ./run.sh"
+sshpass -p "${PASSWORD}" ssh -p $PORT $SSH_PARAMS "$ENDPOINT" "cd $DIR && ./$NAME"
 
 echo ""

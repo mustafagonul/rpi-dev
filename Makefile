@@ -1,4 +1,5 @@
 DOWNLOAD_DIR = downloads
+ROOTFS_DIR = rootfs/usr
 
 
 RPI_IMAGE_TYPE = lite
@@ -11,30 +12,59 @@ QEMU_RPI_KERNEL_LINK = https://github.com/dhruvvyas90/qemu-rpi-kernel.git
 QEMU_RPI_KERNEL_NAME = qemu-rpi-kernel
 QEMU_RPI_KERNEL_REPO = $(DOWNLOAD_DIR)/$(QEMU_RPI_KERNEL_NAME)
 
+GPIOD_NAME = libgpiod-1.2
+GPIOD_TAR = $(GPIOD_NAME).tar.gz
+GPIOD_TAR_LINK = https://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git/snapshot/$(GPIOD_TAR)
+GPIOD_TAR_PATH = $(DOWNLOAD_DIR)/$(GPIOD_TAR)
+GPIOD_DIR = $(DOWNLOAD_DIR)/$(GPIOD_NAME)
+
+
 DTB=$(QEMU_RPI_KERNEL_REPO)/versatile-pb.dtb
 KERNEL=$(QEMU_RPI_KERNEL_REPO)/kernel-qemu-4.19.50-buster
 
 EXAMPLES = $(shell ls -d -- [0-9][0-9][0-9]-*)
 
-# prepare: packages download
-
 packages:
 	sudo apt install $(cat packages.txt)
 
-$(DOWNLOAD_DIR):
-	mkdir -p $(DOWNLOAD_DIR)
+$(DOWNLOAD_DIR): $(RPI_IMAGE_IMG) $(QEMU_RPI_KERNEL_REPO)
 
 $(RPI_IMAGE_IMG): $(RPI_IMAGE_ZIP)
 	unzip -n $(RPI_IMAGE_ZIP) -d $(DOWNLOAD_DIR)
-	./chroot-image.sh $(RPI_IMAGE_IMG)
+	./prepare-image.sh $(RPI_IMAGE_IMG)
 
-$(RPI_IMAGE_ZIP): $(DOWNLOAD_DIR)
+$(RPI_IMAGE_ZIP):
+	mkdir -p $(DOWNLOAD_DIR)
 	wget -nc -P $(DOWNLOAD_DIR) $(RPI_IMAGE_LINK)
 
-$(QEMU_RPI_KERNEL_REPO): $(DOWNLOAD_DIR)
+$(QEMU_RPI_KERNEL_REPO):
+	mkdir -p $(DOWNLOAD_DIR)
 	cd $(DOWNLOAD_DIR) && git clone $(QEMU_RPI_KERNEL_LINK)	&& cd ..
 
-download: $(RPI_IMAGE_IMG) $(QEMU_RPI_KERNEL_REPO)
+$(DTB) $(KERNEL): $(QEMU_RPI_KERNEL_REPO)
+
+image: $(RPI_IMAGE_IMG)
+
+download: $(DOWNLOAD_DIR)
+
+$(GPIOD_TAR_PATH):
+	mkdir -p $(DOWNLOAD_DIR)
+	wget -nc -P $(DOWNLOAD_DIR) $(GPIOD_TAR_LINK)
+
+$(GPIOD_DIR): $(GPIOD_TAR_PATH)
+	mkdir -p $(DOWNLOAD_DIR)
+	tar -C $(DOWNLOAD_DIR) -xzf $(GPIOD_TAR_PATH)
+
+$(ROOTFS_DIR): $(GPIOD_DIR)
+	cd $(GPIOD_DIR) && \
+	./autogen.sh --enable-tools=no --host=arm-linux-gnueabi --prefix=${CURDIR}/$(ROOTFS_DIR) ac_cv_func_malloc_0_nonnull=yes && \
+	make && make install && \
+	cd -
+
+rootfs: $(ROOTFS_DIR)
+
+# prepare: packages download rootfs
+prepare: download rootfs
 
 clean-image:
 	rm -f $(DOWNLOAD_DIR)/*.img
@@ -42,7 +72,10 @@ clean-image:
 clean-download:
 	rm -Rf $(DOWNLOAD_DIR)
 
-run-rpi: # prepare
+clean-rootfs:
+	rm -Rf $(ROOTFS_DIR)
+
+run-rpi: $(RPI_IMAGE_IMG) $(DTB) $(KERNEL)
 	qemu-system-arm \
 		-M versatilepb \
 		-cpu arm1176 \
@@ -56,7 +89,7 @@ run-rpi: # prepare
 		-no-reboot \
 		-nographic
 
-run-rpi-graphic:
+run-rpi-graphic: $(RPI_IMAGE_IMG) $(DTB) $(KERNEL)
 	qemu-system-arm \
 		-M versatilepb \
 		-cpu arm1176 \
@@ -84,8 +117,8 @@ clean-build:
 *-*:
 	@cd $@ && ([ -f main.cpp ] || [ -f main.c ]) && ./build.sh && cd ..
 
-all: download build
+all: download rootfs build
 
-clean: clean-download
+clean: clean-download clean-rootfs
 
-.PHONY: prepare packages download clean-download clean-image run-rpi run-rpi-graphic poweroff-rpi run-ssh build clean-build all clean $(EXAMPLES)
+.PHONY: prepare packages image download rootfs gpiod clean-download clean-rootfs clean-image run-rpi run-rpi-graphic poweroff-rpi run-ssh build clean-build all clean $(EXAMPLES)

@@ -9,3 +9,8 @@ ssh
 sshpass
 wget
 git
+autoconf 
+autoconf-archive 
+libtool 
+libkmod-dev 
+pkg-config
