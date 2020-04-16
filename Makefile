@@ -57,7 +57,7 @@ $(GPIOD_DIR): $(GPIOD_TAR_PATH)
 
 $(ROOTFS_DIR): $(GPIOD_DIR)
 	cd $(GPIOD_DIR) && \
-	./autogen.sh --enable-tools=no --host=arm-linux-gnueabi --prefix=${CURDIR}/$(ROOTFS_DIR) ac_cv_func_malloc_0_nonnull=yes && \
+	./autogen.sh --enable-tools=no --enable-bindings-cxx --host=arm-linux-gnueabi --prefix=${CURDIR}/$(ROOTFS_DIR) ac_cv_func_malloc_0_nonnull=yes && \
 	make && make install && \
 	cd -
 
