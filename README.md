@@ -26,9 +26,17 @@ The project is based on Makefile. User should run the features with make command
   
   Installs the necessary packages to the system.
 
+- `make image`
+
+  Downloads and edits the Raspberry pi image for Qemu emulation.
+
 - `make download`
 
-  Downloads and prepares the tools and the images.
+  Downloads and edits the Raspberry pi image and kernels for Qemu emulation.
+
+- `make rootfs`
+
+  Downloads and builds the necessary libraries for the examples.
 
 - `make clean-image`
 
@@ -36,11 +44,15 @@ The project is based on Makefile. User should run the features with make command
 
 - `make clean-download `
 
-  Removes all downloads and the prepared image. It is same with the `make clean` command.
+  Removes all downloads - the prepared image and the kernels.
+
+- `make rootfs`
+
+  Removes the rootfs.
 
 - `make clean`
 
-  Removes all downloads and the prepared image. It is same with the `make clean-download` command.
+  Removes downloads and the rootfs.
 
 - `make run-rpi`
 
