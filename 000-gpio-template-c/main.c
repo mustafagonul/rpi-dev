@@ -1,5 +1,5 @@
-#include <stdio.h>
 #include <gpiod.h>
+#include <stdio.h>
 
 #define GPIO_DEVICE "/dev/gpiochip0"
 #define GPIO_LINE   (3)
