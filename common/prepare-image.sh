@@ -18,6 +18,11 @@ sudo mount $PARTITION $MOUNT
 
 sudo cp $(which qemu-arm-static) $MOUNT/usr/bin
 
+execute "sudo sed -i 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/g' /etc/locale.gen"
+execute "sudo sed -i 's/en_GB.UTF-8 UTF-8/# en_GB.UTF-8 UTF-8/g' /etc/locale.gen"
+execute "sudo locale-gen en_US.UTF-8"
+execute "sudo update-locale en_US.UTF-8"
+
 execute "sudo apt-get -y install gdbserver"
 execute "sudo apt-get -y install gpiod"
 execute "sudo systemctl enable ssh"

@@ -39,11 +39,11 @@ echo "==========================================================================
 $COMPILER $FILE $COMPILE_PARAMS -g -o $EXE
 if [ $? -eq 0 ]; then
   echo
-  echo "Building success!" 
+  echo "Building success!"
   echo
 else
   echo
-  echo "Building failed!" 
+  echo "Building failed!"
   echo
 
   exit
@@ -60,7 +60,19 @@ sshpass -p "${PASSWORD}" ssh -p $PORT $SSH_PARAMS "$ENDPOINT" "[ -d $DIR ] && rm
 sshpass -p "${PASSWORD}" ssh -p $PORT $SSH_PARAMS "$ENDPOINT" "mkdir -p $DIR"
 
 # Copying
-sshpass -p "${PASSWORD}" scp -P $PORT $SSH_PARAMS "$EXE"             "$ENDPOINT":"$DIR"
+sshpass -p "${PASSWORD}" scp -P $PORT $SSH_PARAMS "$EXE"      "$ENDPOINT":"$DIR"
+
+if [ $? -eq 0 ]; then
+  echo
+  echo "Preparing success!"
+  echo
+else
+  echo
+  echo "Preparing failed!"
+  echo
+
+  exit
+fi
 
 # Running
 echo ""

@@ -31,7 +31,7 @@ $(DOWNLOAD_DIR): $(RPI_IMAGE_IMG) $(QEMU_RPI_KERNEL_REPO)
 
 $(RPI_IMAGE_IMG): $(RPI_IMAGE_ZIP)
 	unzip -n $(RPI_IMAGE_ZIP) -d $(DOWNLOAD_DIR)
-	./prepare-image.sh $(RPI_IMAGE_IMG)
+	./common/prepare-image.sh $(RPI_IMAGE_IMG)
 
 $(RPI_IMAGE_ZIP):
 	mkdir -p $(DOWNLOAD_DIR)
@@ -104,10 +104,10 @@ run-rpi-graphic: $(RPI_IMAGE_IMG) $(DTB) $(KERNEL)
 		-serial stdio
 
 poweroff-rpi: # prepare
-	./ssh.sh sudo poweroff
+	./common/ssh.sh sudo poweroff
 
 run-ssh:
-	./ssh.sh
+	./common/ssh.sh
 
 
 build: $(EXAMPLES)
