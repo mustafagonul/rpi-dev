@@ -38,6 +38,10 @@ The project is based on Makefile. User should run the features with make command
 
   Downloads and builds the necessary libraries for the examples.
 
+- `make sysroot`
+
+  Creates sysroot from prepared image.
+
 - `make clean-image`
 
   Removes only the prepared image.
@@ -46,13 +50,17 @@ The project is based on Makefile. User should run the features with make command
 
   Removes all downloads - the prepared image and the kernels.
 
-- `make rootfs`
+- `make clean-rootfs`
 
   Removes the rootfs.
 
+- `make clean-sysroot`
+
+  Removes the sysroot.
+
 - `make clean`
 
-  Removes downloads and the rootfs.
+  Removes downloads, rootfs and sysroot.
 
 - `make run-rpi`
 

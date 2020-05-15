@@ -1,5 +1,6 @@
-DOWNLOAD_DIR = downloads
-ROOTFS_DIR = rootfs/usr
+DOWNLOAD_DIR = ./downloads
+ROOTFS_DIR = ./rootfs/usr
+SYSROOT_DIR = ./sysroot
 
 
 RPI_IMAGE_TYPE = lite
@@ -63,8 +64,13 @@ $(ROOTFS_DIR): $(GPIOD_DIR)
 
 rootfs: $(ROOTFS_DIR)
 
+$(SYSROOT_DIR): $(RPI_IMAGE_IMG)
+	./common/prepare-sysroot.sh $(RPI_IMAGE_IMG) $(SYSROOT_DIR)
+
+# sysroot: $(SYSROOT_DIR)
+
 # prepare: packages download rootfs
-prepare: download rootfs
+prepare: download rootfs sysroot
 
 clean-image:
 	rm -f $(DOWNLOAD_DIR)/*.img
@@ -74,6 +80,9 @@ clean-download:
 
 clean-rootfs:
 	rm -Rf $(ROOTFS_DIR)
+
+clean-sysroot:
+	rm -Rf $(SYSROOT_DIR)
 
 run-rpi: $(RPI_IMAGE_IMG) $(DTB) $(KERNEL)
 	qemu-system-arm \
@@ -117,8 +126,8 @@ clean-build:
 *-*:
 	@cd $@ && ([ -f main.cpp ] || [ -f main.c ]) && ./build.sh && cd ..
 
-all: download rootfs build
+all: download rootfs sysroot build
 
-clean: clean-download clean-rootfs
+clean: clean-download clean-rootfs clean-sysroot
 
-.PHONY: prepare packages image download rootfs gpiod clean-download clean-rootfs clean-image run-rpi run-rpi-graphic poweroff-rpi run-ssh build clean-build all clean $(EXAMPLES)
+.PHONY: prepare packages image download rootfs sysroot gpiod clean-download clean-rootfs clean-sysroot clean-image run-rpi run-rpi-graphic poweroff-rpi run-ssh build clean-build all clean $(EXAMPLES)

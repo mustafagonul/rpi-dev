@@ -36,7 +36,7 @@ echo "==========================================================================
 echo "Building $NAME ..."
 echo "======================================================================================================"
 
-$COMPILER $FILE $COMPILE_PARAMS -g -o $EXE
+$COMPILER $FILE $COMPILE_PARAMS -g3 -O0 -o $EXE
 if [ $? -eq 0 ]; then
   echo
   echo "Building success!"
