@@ -1,6 +1,6 @@
-DOWNLOAD_DIR = ./downloads
-ROOTFS_DIR = ./rootfs/usr
-SYSROOT_DIR = ./sysroot
+DOWNLOAD_DIR = downloads
+ROOTFS_DIR = rootfs/usr
+SYSROOT_DIR = sysroot
 
 
 RPI_IMAGE_TYPE = lite
@@ -64,7 +64,13 @@ $(ROOTFS_DIR): $(GPIOD_DIR)
 
 rootfs: $(ROOTFS_DIR)
 
-$(SYSROOT_DIR): $(RPI_IMAGE_IMG)
+common/gdbinit:
+	m4 -D DIR=.. -D SYSROOT=$(SYSROOT_DIR) common/gdbinit.in > common/gdbinit
+
+$(HOME)/.gdbinit:
+	m4 -D DIR=$(PWD) -D SYSROOT=$(SYSROOT_DIR) common/gdbinit.in > $(HOME)/.gdbinit
+
+$(SYSROOT_DIR): $(RPI_IMAGE_IMG) common/gdbinit $(HOME)/.gdbinit
 	./common/prepare-sysroot.sh $(RPI_IMAGE_IMG) $(SYSROOT_DIR)
 
 # sysroot: $(SYSROOT_DIR)
@@ -83,6 +89,8 @@ clean-rootfs:
 
 clean-sysroot:
 	rm -Rf $(SYSROOT_DIR)
+	rm -f common/gdbinit
+	rm -f $(HOME)/.gdbinit
 
 run-rpi: $(RPI_IMAGE_IMG) $(DTB) $(KERNEL)
 	qemu-system-arm \
@@ -124,7 +132,8 @@ build: $(EXAMPLES)
 clean-build:
 	
 *-*:
-	@cd $@ && ([ -f main.cpp ] || [ -f main.c ]) && ./build.sh && cd ..
+	make -C $@
+	make -C $@ clean
 
 all: download rootfs sysroot build
 

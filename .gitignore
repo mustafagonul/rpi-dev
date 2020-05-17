@@ -3,6 +3,7 @@ downloads
 rootfs
 sysroot
 core
+common/gdbinit
 
 .vscode
 .history

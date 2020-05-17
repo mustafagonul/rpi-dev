@@ -1,0 +1,2 @@
+set solib-search-path DIR/SYSROOT/lib
+set sysroot DIR/SYSROOT

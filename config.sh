@@ -1,3 +1,4 @@
+#!/bin/bash
 
 USER="pi"
 PASSWORD="raspberry"
