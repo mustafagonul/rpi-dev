@@ -5,6 +5,8 @@ include ../common/config.mk
 NAME = $(shell basename $(shell pwd))
 DIR = /home/$(USER)/$(NAME)
 BUILD = build
+CORE = core
+GDBINIT = ../common/gdbinit
 TARGET = $(BUILD)/$(NAME)
 C_SRCS = $(shell find -name *.c)
 CPP_SRCS = $(shell find -name *.cpp)
@@ -13,9 +15,10 @@ CPP_OBJS = $(CPP_SRCS:./%.cpp=./$(BUILD)/%.cpp_o)
 
 CC = arm-linux-gnueabi-gcc
 CXX = arm-linux-gnueabi-g++
+DBG = gdb-multiarch
 DEFAULT_CFLAGS = -g3 -O0
 
-all: run
+all: coredump
 
 parameters:
 	@echo
@@ -44,7 +47,7 @@ parameters:
 	@echo "================================================================================================="
 	@echo
 
-pre_compile: parameters
+pre_compile: # parameters
 	@echo
 	@echo "================================================================================================="
 	@echo "Compiling $(NAME) ..."
@@ -52,6 +55,7 @@ pre_compile: parameters
 	@echo
 
 post_compile:
+	@echo
 	@echo "Compiling done!"
 	@echo
 
@@ -101,8 +105,34 @@ pre_run:
 	@echo
 
 run: prepare pre_run
-	@sshpass -p "$(PASSWORD)" ssh -p $(PORT) $(SSH_PARAMS) $(ENDPOINT) "cd $(DIR) && ./$(NAME) 2>&1"
+	@sshpass -p "$(PASSWORD)" ssh -ttt -p $(PORT) $(SSH_PARAMS) $(ENDPOINT) 'cd $(DIR) && ./$(NAME) 2>&1 || true'
 	@echo
+
+pre_coredump:
+	@echo
+	@echo "================================================================================================="
+	@echo "Checking coredump file for $(NAME) ..."
+	@echo "================================================================================================="
+	@echo
+
+target_coredump:
+	@if sshpass -p $(PASSWORD) scp -P $(PORT) $(SSH_PARAMS) $(ENDPOINT):$(DIR)/$(CORE) $(CORE) > /dev/null 2>&1 ; then echo "Coredump file copied." ; else echo "No coredump file found." ; fi
+	@echo
+
+coredump: run pre_coredump target_coredump
+
+pre_debug:
+	@echo
+	@echo "================================================================================================="
+	@echo "Checking coredump file ..."
+	@echo "================================================================================================="
+	@echo
+
+target_debug:
+	@if [ -f $(CORE) ] ; then echo "Coredump file found." ; echo ; $(DBG) $(TARGET) -c $(CORE) -n -x $(GDBINIT) ; else echo "No coredump file found." ; echo ; fi
+	@echo
+
+debug: pre_debug target_debug
 
 pre_clean:
 	@echo
@@ -116,10 +146,19 @@ post_clean:
 	@echo
 
 target_clean:
+	@echo "Removing build directory."
 	@rm -Rf build
+	@echo "Removing coredump file if exists."
+	@rm -Rf core
+	@echo "Removing $(NAME) directory from target."
 	@sshpass -p "$(PASSWORD)" ssh -p $(PORT) $(SSH_PARAMS) $(ENDPOINT) "[ -d $(DIR) ] && rm -Rf $(DIR) || true"
+	@echo
 
 clean: pre_clean target_clean post_clean
 
-.PHONY: pre_compile post_compile compile pre_prepare target_prepare post_prepare pre_run run pre_clean post_clean target_clean clean
-.DEFAULT: run
+.PHONY: pre_compile post_compile compile \
+        pre_prepare target_prepare post_prepare prepare \
+		pre_run run \
+		pre_coredump target_coredump coredump \
+		pre_debug target_debug debug \
+		pre_clean post_clean target_clean clean

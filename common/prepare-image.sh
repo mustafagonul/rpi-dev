@@ -27,6 +27,9 @@ execute "sudo apt-get -y install gdbserver"
 execute "sudo apt-get -y install gpiod"
 execute "sudo systemctl enable ssh"
 
+execute "sudo mv /etc/security/limits.conf /etc/security/limits.conf.old"
+execute "echo '* soft core unlimited' > /etc/security/limits.conf"
+
 sudo rm $MOUNT/usr/bin/qemu-arm-static
 
 sudo umount $PARTITION

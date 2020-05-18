@@ -25,6 +25,9 @@ KERNEL=$(QEMU_RPI_KERNEL_REPO)/kernel-qemu-4.19.50-buster
 
 EXAMPLES = $(shell ls -d -- [0-9][0-9][0-9]-*)
 
+
+default: prepare
+
 packages:
 	sudo apt install $(cat packages.txt)
 
