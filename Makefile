@@ -71,7 +71,7 @@ common/gdbinit:
 	m4 -D DIR=.. -D SYSROOT=$(SYSROOT_DIR) common/gdbinit.in > common/gdbinit
 
 $(HOME)/.gdbinit:
-	m4 -D DIR=$(PWD) -D SYSROOT=$(SYSROOT_DIR) common/gdbinit.in > $(HOME)/.gdbinit
+	m4 -D DIR=$(CURDIR) -D SYSROOT=$(SYSROOT_DIR) common/gdbinit.in > $(HOME)/.gdbinit
 
 $(SYSROOT_DIR): $(RPI_IMAGE_IMG) common/gdbinit $(HOME)/.gdbinit
 	./common/prepare-sysroot.sh $(RPI_IMAGE_IMG) $(SYSROOT_DIR)
