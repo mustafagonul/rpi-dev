@@ -18,7 +18,8 @@ CXX = arm-linux-gnueabi-g++
 DBG = gdb-multiarch
 DEFAULT_CFLAGS = -g3 -O0
 
-all: coredump
+
+all: compile
 
 parameters:
 	@echo
@@ -34,9 +35,12 @@ parameters:
 	@echo "NAME =           $(NAME)"
 	@echo "DIR =            $(DIR)"
 	@echo "BUILD =          $(BUILD)"
+	@echo "CORE =           $(CORE)"
+	@echo "GDBINIT =        $(GDBINIT)"
 	@echo "TARGET =         $(TARGET)"
 	@echo "CC =             $(CC)"
 	@echo "CXX =            $(CXX)"
+	@echo "GDB =            $(GDB)"
 	@echo "CFLAGS =         $(CFLAGS)"
 	@echo "LFLAGS =         $(LFLAGS)"
 	@echo "DEFAULT_CFLAGS = $(DEFAULT_CFLAGS)"
@@ -97,17 +101,6 @@ target_prepare:
 
 prepare: compile pre_prepare target_prepare post_prepare
 
-pre_run:
-	@echo
-	@echo "================================================================================================="
-	@echo "Running $(NAME) ..."
-	@echo "================================================================================================="
-	@echo
-
-run: prepare pre_run
-	@sshpass -p "$(PASSWORD)" ssh -ttt -p $(PORT) $(SSH_PARAMS) $(ENDPOINT) 'cd $(DIR) && ./$(NAME) 2>&1 || true'
-	@echo
-
 pre_coredump:
 	@echo
 	@echo "================================================================================================="
@@ -119,7 +112,22 @@ target_coredump:
 	@if sshpass -p $(PASSWORD) scp -P $(PORT) $(SSH_PARAMS) $(ENDPOINT):$(DIR)/$(CORE) $(CORE) > /dev/null 2>&1 ; then echo "Coredump file copied." ; else echo "No coredump file found." ; fi
 	@echo
 
-coredump: run pre_coredump target_coredump
+coredump: pre_coredump target_coredump
+
+pre_run:
+	@echo
+	@echo "================================================================================================="
+	@echo "Running $(NAME) ..."
+	@echo "================================================================================================="
+	@echo
+
+target_run:
+	@sshpass -p "$(PASSWORD)" ssh -ttt -p $(PORT) $(SSH_PARAMS) $(ENDPOINT) 'cd $(DIR) && ./$(NAME) 2>&1 || true'
+	@echo
+
+post_run: coredump
+
+run: prepare pre_run target_run post_run
 
 pre_debug:
 	@echo
@@ -158,7 +166,7 @@ clean: pre_clean target_clean post_clean
 
 .PHONY: pre_compile post_compile compile \
         pre_prepare target_prepare post_prepare prepare \
-		pre_run run \
 		pre_coredump target_coredump coredump \
+		pre_run target_run post_run run \
 		pre_debug target_debug debug \
 		pre_clean post_clean target_clean clean
