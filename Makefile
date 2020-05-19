@@ -136,7 +136,6 @@ clean-build:
 	
 *-*:
 	make -C $@
-	make -C $@ clean
 
 all: download rootfs sysroot build
 
