@@ -40,7 +40,7 @@ parameters:
 	@echo "TARGET =         $(TARGET)"
 	@echo "CC =             $(CC)"
 	@echo "CXX =            $(CXX)"
-	@echo "GDB =            $(GDB)"
+	@echo "DBG =            $(DBG)"
 	@echo "CFLAGS =         $(CFLAGS)"
 	@echo "LFLAGS =         $(LFLAGS)"
 	@echo "DEFAULT_CFLAGS = $(DEFAULT_CFLAGS)"
